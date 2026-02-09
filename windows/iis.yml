@@ -7,5 +7,5 @@
         src: C:\Users\Administrator\Documents\Testfolder
         dest: C:\Users\Administrator\Documents\Testfolder
         remote_src: true
-      delegate_to: database
+      delegate_to: "{{ groups['database'][0]}}" 
   
