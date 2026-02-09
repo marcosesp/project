@@ -1,0 +1,8 @@
+---
+- name: Installing wireshark app
+  hosts: dev
+  tasks:
+    - name: Installing wireshark
+      ansible.builtin.dnf:
+        name: wireshark
+        state: latest

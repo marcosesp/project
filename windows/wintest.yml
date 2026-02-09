@@ -1,0 +1,12 @@
+---
+- name: Testing windows
+  hosts: dev
+  tasks:
+    - name: Creating a test directory
+      ansible.windows.win_command: whoami
+      register: whoami_out
+
+    - name: showing the results
+      ansible.builtin.debug:
+        var: whoami_out
+

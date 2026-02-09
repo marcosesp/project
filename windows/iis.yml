@@ -1,0 +1,10 @@
+---
+- name: Copy some files into second windows
+  hosts: dev
+  tasks:
+    - name: Copy a directory into the remote host
+      ansible.windows.win_copy:
+        src: C:\Users\Administrator\Documents\Testfolder
+        dest: C:\Users\Administrator\Documents\Testfolder
+      delegate_to: dabase
+  

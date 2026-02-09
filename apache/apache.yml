@@ -1,0 +1,24 @@
+---
+- name: Installing httpd server
+  hosts: nodo06
+  tasks:
+    - name: Using dnf module to install httpd
+      ansible.builtin.dnf:
+        name: httpd
+        state: latest
+
+    - name: Running the httpd service
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true
+
+    - name: adding http and https service into the firewall
+      ansible.posix.firewalld:
+        service: "{{item}}"
+        state: enabled
+        permanent: true
+        immediate: true
+      loop:
+        - http
+        - https
