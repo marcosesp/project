@@ -6,5 +6,5 @@
       ansible.windows.win_copy:
         src: C:\Users\Administrator\Documents\Testfolder
         dest: C:\Users\Administrator\Documents\Testfolder
-      delegate_to: dabase
+      delegate_to: database
   
