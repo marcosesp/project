@@ -4,6 +4,6 @@
   tasks:
     - name: Copy a directory into the remote host
       ansible.windows.win_copy:
-        src: C:\Users\Administrator\Documents\Testfolder
-        dest: C:\Users\Administrator\Desktop
+        src: "C:\Users\Administrator\Documents\Testfolder"
+        dest: "C:\Users\Administrator\Desktop"
   
