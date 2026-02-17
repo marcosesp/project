@@ -1,0 +1,9 @@
+- name: Copy some files into second windows
+  hosts: dev
+  tasks:
+    - name: Copy a directory into the remote host
+      ansible.windows.win_command: >
+        robocopy: "C:\Users\Administrator\Documents\Testfolder" "\\10.0.32.227\c$\Users\Administrator\Documents" /E /R:2 /MT:16 /NFL /NDL
+      register: robo
+      changed_when: robo.rc != 0
+      failed_when: robo.rc >= 8
