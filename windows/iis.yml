@@ -5,7 +5,5 @@
     - name: Copy a directory into the remote host
       ansible.windows.win_copy:
         src: C:\Users\Administrator\Documents\Testfolder
-        dest: C:\Users\Administrator\Documents\Testfolder
-        remote_src: true
-      delegate_to: "{{ groups['database'][0]}}" 
+        dest: C:\Users\Administrator\Desktop
   
