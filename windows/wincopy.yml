@@ -5,8 +5,8 @@
       ansible.windows.win_command:
         argv:
           - robocopy.exe 
-          - "C:\Users\Administrator\Documents\Testfolder" 
-          - "\\10.0.32.227\c$\Users\Administrator\Documents\Testfolder"
+          - C:\Users\Administrator\Documents\Testfolder
+          - \\10.0.32.227\c$\Users\Administrator\Documents\Testfolder
           - /E /R:2 /MT:16 /NFL /NDL
       register: robo
       changed_when: robo.rc != 0
