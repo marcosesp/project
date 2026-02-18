@@ -1,3 +1,4 @@
+---
 - name: Modifiying remote registry 
   hosts: database
   tasks:
