@@ -1,0 +1,27 @@
+- name: Modifiying remote registry 
+  hosts: database
+  tasks:
+    - name: allow admin shares between local accounts
+      ansible.windows.win_regedit:
+        path: HKLM:\SOFTWARE\Microsoft\windows\CurrentVersion\Policies\System
+        name: LocalAccountTokenFilterPolicy
+        data: 1
+        type: dword
+
+- name: Copy some files into second windows
+  hosts: dev
+  tasks:
+    - name: Copy a directory into the remote host
+      ansible.windows.win_command:
+        argv:
+          - robocopy.exe 
+          - C:\Users\Administrator\Documents\Testfolder
+          - \\10.0.32.227\c$\Users\Administrator\Documents\Testfolder
+          - /E 
+          - /R:2 
+          - /MT:16 
+          - /NFL 
+          - /NDL
+      register: robo
+      changed_when: robo.rc != 0
+      failed_when: robo.rc >= 8
