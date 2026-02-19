@@ -7,7 +7,7 @@
         argv:
           - robocopy.exe 
           - C:\Users\ansible.IPEXLAB\Documents\Testlocalfolder
-          - \\10.0.32.227\c$\Users\ansible.IPEXLAB\Documents\Testlocalfolder
+          - \\10.0.32.227\c$\Users\mespinosa\Documents\Testlocalfolder
           - /E 
           - /R:2 
           - /MT:16 
