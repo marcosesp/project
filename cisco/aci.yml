@@ -1,0 +1,37 @@
+---
+- name: EPGs EN EL APIC
+  hosts: apic
+  connection: local
+  gather_facts: False
+
+  tasks:  
+      
+    - read_csv:
+        path: query.csv
+        key: key 
+      register: int_to_epg
+    
+
+            
+    - name: OBTENER INFORMACION DE UN EPG
+      cisco.aci.aci_static_binding_to_epg:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: false
+#          tenant: "{{ item.value.tenant }}"
+          ap: "{{ item.value.ap }}"
+          epg: "{{ item.value.epg }}"
+#          interface_type: "{{ item.value.interface_type }}"
+          pod: "{{ item.value.pod }}"
+#          leafs: "{{ item.value.leafs }}"
+#          interface: "{{ item.value.interface }}"
+          state: query
+      delegate_to: localhost
+      register: query_result
+      loop: "{{ int_to_epg.dict|dict2items }}"
+    - name: Resultado
+      debug:
+        msg: "{{ query_result }}"
+
+#      loop: "{{ int_to_epg.dict|dict2items }}"
