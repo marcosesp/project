@@ -1,7 +1,7 @@
 ---
 - name: EPGs EN EL APIC
-  hosts: apic
-  connection: local
+  hosts: 10.0.32.240
+    #  connection: local
   gather_facts: False
 
   tasks:  
@@ -27,7 +27,6 @@
 #          leafs: "{{ item.value.leafs }}"
 #          interface: "{{ item.value.interface }}"
           state: query
-      delegate_to: localhost
       register: query_result
       loop: "{{ int_to_epg.dict|dict2items }}"
     - name: Resultado
