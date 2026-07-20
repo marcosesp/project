@@ -9,7 +9,7 @@
       changed_when: false
 
     - name: Verificar que WinSCP esta instalado
-      ansible.windows.win_shel: | 
+      ansible.windows.win_shell: | 
         winget list --id WinSCP.WinSCP --exact
       register: winscp
       changed_when: false
