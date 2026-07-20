@@ -3,10 +3,9 @@
   hosts: all
   tasks:
     - name: Instalando wincsp
-      ansible.windows.win_shell: 
-        args:
-          winget install --id winscp.winscp
-          --silent
-          --accept-package-agreements
-          --accept-source-agreements
+      ansible.windows.win_shell: >
+        winget install --id winscp.winscp
+        --silent
+        --accept-package-agreements
+        --accept-source-agreements
 
