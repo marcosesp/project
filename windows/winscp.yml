@@ -1,6 +1,6 @@
 ---
 - name: Instalando winscp via powershell con winget
-  hosts: winservers
+  hosts: all
   tasks:
     - name: Instalando wincsp
       ansible.windows.win_shell: 
