@@ -3,7 +3,7 @@
   hosts: all
   tasks:
     - name: Instalando wincsp
-      ansible.windows.win_shell: >
+      ansible.windows.win_shell: | 
         winget source reset --force
         winget source update
 
