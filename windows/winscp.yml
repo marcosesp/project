@@ -9,9 +9,10 @@
     #  changed_when: false
 
     - name: Instalando wincsp
-      ansible.windows.win_powershell: >
-        winget install --id WinSCP.WinSCP
-        --silent
-        --source winget
-        --accept-package-agreements
-        --accept-source-agreements
+      ansible.windows.win_powershell: 
+        script: >
+          winget install --id WinSCP.WinSCP
+          --silent
+          --source winget
+          --accept-package-agreements
+          --accept-source-agreements
