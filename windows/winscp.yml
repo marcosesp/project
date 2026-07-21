@@ -2,17 +2,9 @@
 - name: Instalando winscp via powershell con winget
   hosts: all
   tasks:
-    #    - name: Actualizando lista de paquetes winget
-    #  ansible.windows.win_shell: | 
-    #    winget source reset --force
-    #    winget source update
-    #  changed_when: false
-
     - name: Instalando wincsp
       ansible.windows.win_powershell: 
         script: >
           winget install --id WinSCP.WinSCP
-          --silent
-          --source winget
-          --accept-package-agreements
           --accept-source-agreements
+      changed_when: false
