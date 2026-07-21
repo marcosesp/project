@@ -13,6 +13,3 @@
         and
         'No newer package versions are available' not in winscp_result.output
 
-        #  "No available upgrade found" not in (winscp_result.output | join(' '))
-        # and
-        #"No newer package versions are available" not in (winscp_result.output | join(' '))
