@@ -7,6 +7,7 @@
         script: >
           winget install --id WinSCP.WinSCP
           --accept-source-agreements
+          --scope machine
       register: winscp_result
       changed_when: >
         'No available upgrade found.' not in winscp_result.output
