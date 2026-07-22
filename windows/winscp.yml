@@ -1,6 +1,8 @@
 ---
 - name: Instalando winscp via powershell con winget
-  hosts: all
+  hosts: winserver02
+  vars_files:
+    vault_windows.yml
   tasks:
     - name: Instalando wincsp
       ansible.windows.win_powershell: 
@@ -14,3 +16,12 @@
         and
         'Found an existing package already installed.' not in winscp_result.output
 
+    - name: Usando Winscp para sincronizar archivos
+      ansible.windows.win_powershell:
+        script: |
+          $ "C:\Program Files (x86)\WinSCP\WinSCP.com" /command
+          "open sftp://{{remote_user}}:{{remote_password}}@10.0.32.221/"
+          "mkdir /home/ansible/testfolder"
+          "synchronize remote C:\Users\ansible.IPEXLAB\Documents\Testlocalfolder\ /home/ansible/tesfolder"
+          "exit"
+          
