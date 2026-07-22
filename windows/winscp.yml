@@ -20,7 +20,7 @@
       ansible.windows.win_powershell:
         script: |
           & "C:\Program Files (x86)\WinSCP\WinSCP.com" /command
-          "open sftp://{{remote_user}}:{{remote_password | urlencode }}@10.0.32.221/"
+          "open sftp://{{remote_user}}:{{remote_password | ansible.builtin.base64encode }}@10.0.32.221/"
           "mkdir /home/ansible/testfolder"
           "synchronize remote C:\Users\ansible.IPEXLAB\Documents\Testlocalfolder\ /home/ansible/tesfolder"
           "exit"
