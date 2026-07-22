@@ -19,7 +19,7 @@
     - name: Usando Winscp para sincronizar archivos
       ansible.windows.win_powershell:
         script: |
-          $ "C:\Program Files (x86)\WinSCP\WinSCP.com" /command
+          & "C:\Program Files (x86)\WinSCP\WinSCP.com" /command
           "open sftp://{{remote_user}}:{{remote_password}}@10.0.32.221/"
           "mkdir /home/ansible/testfolder"
           "synchronize remote C:\Users\ansible.IPEXLAB\Documents\Testlocalfolder\ /home/ansible/tesfolder"
