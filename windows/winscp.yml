@@ -24,6 +24,6 @@
           "option batch continue" `
           "open sftp://{{remote_user}}:{{remote_password}}@10.0.32.221/" `
           "mkdir /home/ansible/testfolder" `
-          "synchronize remote C:\Users\ansible.IPEXLAB\Documents\Testlocalfolder\ /home/ansible/tesfolder" `
+          "synchronize remote C:\Users\ansible.IPEXLAB\Documents\Testlocalfolder\ /home/ansible/testfolder" `
           "exit"
           
