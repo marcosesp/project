@@ -1,8 +1,6 @@
 ---
 - name: Instalando winscp via powershell con winget
   hosts: winserver02
-  vars_files:
-    vault_windows.yml
   tasks:
     - name: Instalando wincsp
       ansible.windows.win_powershell: 
