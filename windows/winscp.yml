@@ -22,7 +22,7 @@
           & "C:\Program Files (x86)\WinSCP\WinSCP.com" /command `
           "option confirm off" `
           "option batch continue" `
-          "open sftp://{{remote_user}}:{{remote_password}}@10.0.32.221/" `
+          "open sftp://{{remote_user}}:{{remote_password | ansible.builtin.password_hash('bcrypt')}}@10.0.32.221/" `
           "mkdir /home/ansible/testfolder" `
           "synchronize remote C:\Users\ansible.IPEXLAB\Documents\Testlocalfolder\ /home/ansible/testfolder" `
           "exit"
