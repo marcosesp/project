@@ -13,18 +13,19 @@
         'No available upgrade found.' not in winscp_result.output
         and
         'Found an existing package already installed.' not in winscp_result.output
-
+        
     - name: Usando Winscp para sincronizar archivos
       ansible.windows.win_powershell:
         script: |
           & "C:\Program Files (x86)\WinSCP\WinSCP.com" /command `
           "option confirm off" `
           "option batch continue" `
-          "open sftp://{{ remote_user }}@10.0.32.221/" `
-          "Password: {{ remote_password }}" `
+          "open sftp://{{ remote_user }}:%WINSCP_PASSWORD%@10.0.32.221/" `
           "mkdir /home/ansible/testfolder" `
           "synchronize remote C:\Users\ansible.IPEXLAB\Documents\Testlocalfolder\ /home/ansible/testfolder" `
           "exit"
+      environment:
+        WINSCP_PASSWORD: "{{ remote_password }}"
       register: sync
       changed_when: >
         'Nothing to synchronize.' not in sync.output   
