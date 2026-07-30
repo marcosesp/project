@@ -20,12 +20,12 @@
           & "C:\Program Files (x86)\WinSCP\WinSCP.com" /command `
           "option confirm off" `
           "option batch continue" `
-          "open sftp://{{ remote_user }}:{{remote_password}}@10.0.32.221/" `
+          "open sftp://{{ remote_user }}:%WINSCP_PASSWORD%@10.0.32.221/" `
           "mkdir /home/ansible/testfolder" `
           "synchronize remote C:\Users\ansible.IPEXLAB\Documents\Testlocalfolder\ /home/ansible/testfolder" `
           "exit"
-          #      environment:
-          #       WINSCP_PASSWORD: "{{ remote_password }}"
+      environment:
+        WINSCP_PASSWORD: "{{ remote_password }}"
       register: sync
       changed_when: >
         'Nothing to synchronize.' not in sync.output   
