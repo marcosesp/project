@@ -24,8 +24,8 @@
           "mkdir /home/ansible/testfolder" `
           "synchronize remote C:\Users\ansible.IPEXLAB\Documents\Testlocalfolder\ /home/ansible/testfolder" `
           "exit"
-          #      environment:
-          #       WINSCP_PASSWORD: "{{ remote_password }}"
+      environment:
+        WINSCP_PASSWORD: "{{ remote_password }}"
       register: sync
       changed_when: >
         'Nothing to synchronize.' not in sync.output   
