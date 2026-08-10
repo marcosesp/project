@@ -25,6 +25,7 @@
         watch -n1 tail -n 10 /tmp/dnf-update.log
       register: dnf_progress
       changed_when: false
+      async: 200  
       poll: 0
 #      loop: "{{ range(1, 61) | list }}"
 #      loop_control:
