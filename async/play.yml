@@ -1,0 +1,48 @@
+- name: Prueba DNF progreso
+  hosts: db
+  gather_facts: false
+
+  tasks:
+
+    - name: Eliminar log anterior
+      ansible.builtin.file:
+        path: /tmp/dnf-update.log
+        state: absent
+
+    - name: Iniciar DNF update
+      ansible.builtin.shell: |
+        stdbuf -oL -eL dnf -y update > /tmp/dnf-update.log 2>&1
+      async: 3600
+      poll: 0
+      register: dnf_job
+
+    - name: Mostrar ID del job
+      ansible.builtin.debug:
+        msg: "DNF ejecutándose con JID {{ dnf_job.ansible_job_id }}"
+
+    - name: Consultar progreso de DNF
+      ansible.builtin.shell: |
+        tail -n 10 /tmp/dnf-update.log
+      register: dnf_progress
+      changed_when: false
+      loop: "{{ range(1, 61) | list }}"
+      loop_control:
+        pause: 5
+
+    - name: Esperar que DNF termine
+      ansible.builtin.async_status:
+        jid: "{{ dnf_job.ansible_job_id }}"
+      register: dnf_result
+      until: dnf_result is finished
+      retries: 120
+      delay: 5
+
+    - name: Mostrar resultado final
+      ansible.builtin.command:
+        cmd: cat /tmp/dnf-update.log
+      register: dnf_final
+      changed_when: false
+
+    - name: Output final
+      ansible.builtin.debug:
+        var: dnf_final.stdout_lines
