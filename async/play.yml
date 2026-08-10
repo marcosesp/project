@@ -25,9 +25,14 @@
         watch -n1 tail -n 10 /tmp/dnf-update.log
       register: dnf_progress
       changed_when: false
+      poll: 0
 #      loop: "{{ range(1, 61) | list }}"
 #      loop_control:
 #        pause: 5
+
+    - name: Imprimiendo el progreso e jevi 
+      ansible.builtin.debug:
+        var: dnf_progress
 
     - name: Esperar que DNF termine
       ansible.builtin.async_status:
