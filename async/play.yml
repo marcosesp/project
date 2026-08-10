@@ -22,12 +22,12 @@
 
     - name: Consultar progreso de DNF
       ansible.builtin.shell: |
-        tail -n 10 /tmp/dnf-update.log
+        watch -n1 tail -n 10 /tmp/dnf-update.log
       register: dnf_progress
       changed_when: false
-      loop: "{{ range(1, 61) | list }}"
-      loop_control:
-        pause: 5
+#      loop: "{{ range(1, 61) | list }}"
+#      loop_control:
+#        pause: 5
 
     - name: Esperar que DNF termine
       ansible.builtin.async_status:
