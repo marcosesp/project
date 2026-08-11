@@ -33,7 +33,7 @@
 
     - name: Imprimiendo el progreso e jevi 
       ansible.builtin.debug:
-        var: dnf_progress
+        var: dnf_progress.ansible_job_id
 
     - name: Esperar que DNF termine
       ansible.builtin.async_status:

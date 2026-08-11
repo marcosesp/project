@@ -1,0 +1,44 @@
+---
+- name: Monitorear DNF update
+  hosts: all
+  become: true
+  gather_facts: false
+
+  vars:
+    dnf_log: /tmp/dnf-update.log
+    dnf_offset: /tmp/dnf-update.offset
+
+  tasks:
+
+    - name: Limpiar archivos de ejecuciones anteriores
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "{{ dnf_log }}"
+        - "{{ dnf_offset }}"
+
+    - name: Inicializar posicion de lectura
+      ansible.builtin.copy:
+        content: "1"
+        dest: "{{ dnf_offset }}"
+        mode: "0644"
+
+    - name: Iniciar DNF update en segundo plano
+      ansible.builtin.shell: |
+        stdbuf -oL -eL dnf -y update > {{ dnf_log }} 2>&1
+      async: 3600
+      poll: 0
+      register: dnf_job
+
+    - name: Monitorear progreso de DNF
+      ansible.builtin.include_tasks: leer_dnf.yml
+      loop: "{{ range(1, 361) | list }}"
+      loop_control:
+        pause: 5
+      when: not dnf_finished | default(false)
+
+    - name: Mostrar estado final
+      ansible.builtin.debug:
+        msg: "DNF update finalizado correctamente"
+      when: dnf_finished | default(false)

@@ -1,0 +1,27 @@
+---
+- name: Consultar estado del proceso DNF
+  ansible.builtin.async_status:
+    jid: "{{ dnf_job.ansible_job_id }}"
+  register: dnf_status
+
+- name: Leer nuevo output de DNF
+  ansible.builtin.shell: |
+    inicio=$(cat {{ dnf_offset }})
+    total=$(wc -l < {{ dnf_log }})
+
+    if [ "$total" -ge "$inicio" ]; then
+      sed -n "${inicio},${total}p" {{ dnf_log }}
+      echo $((total + 1)) > {{ dnf_offset }}
+    fi
+  register: dnf_output
+  changed_when: false
+
+- name: Mostrar nuevo output
+  ansible.builtin.debug:
+    msg: "{{ dnf_output.stdout_lines }}"
+  when: dnf_output.stdout | length > 0
+
+- name: Marcar DNF como finalizado
+  ansible.builtin.set_fact:
+    dnf_finished: true
+  when: dnf_status.finished
