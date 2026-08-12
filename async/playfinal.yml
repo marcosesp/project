@@ -5,5 +5,5 @@
 
   tasks:
     - name: Ejecutar actualización de DNF con streaming directo
-      ansible.builtin.shell: |
-        stdbuf -oL -eL dnf -y update
+      ansible.builtin.raw: |
+        sudo stdbuf -oL -eL dnf -y update
