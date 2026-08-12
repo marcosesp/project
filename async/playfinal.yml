@@ -6,5 +6,4 @@
 
   tasks:
     - name: Ejecutar actualización de DNF con streaming directo
-      ansible.builtin.shell: |
-        sudo dnf -y update
+      ansible.builtin.script: update.sh
