@@ -1,10 +1,10 @@
 ---
 - name: Actualizar Sistema con Logs en Tiempo Real
   hosts: all
-  become: false
+  become: true
   gather_facts: false
 
   tasks:
     - name: Ejecutar actualización de DNF con streaming directo
-      ansible.builtin.raw: |
+      ansible.builtin.shell: |
         sudo dnf -y update
