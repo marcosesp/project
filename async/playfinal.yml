@@ -36,4 +36,3 @@
       loop: "{{ range(1, 10801) | list }}"
       loop_control:
         loop_var: monitor_iteration
-        pause: 1

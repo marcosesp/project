@@ -34,13 +34,19 @@
       DNF terminó con error.
       Return code: {{ dnf_status.rc }}
   when:
-    - dnf_status.finished | default(false)
+    - dnf_status.finished | default(false) | bool
     - dnf_status.rc is defined
     - dnf_status.rc | int != 0
 
 - name: Finalizar monitoreo si DNF termino correctamente
   ansible.builtin.meta: end_host
   when:
-    - dnf_status.finished | default(false)
+    - dnf_status.finished | default(false) | bool
     - dnf_status.rc is defined
     - dnf_status.rc | int == 0
+
+- name: Esperar antes de la proxima lectura
+  ansible.builtin.pause:
+    seconds: 1
+  when:
+    - not (dnf_status.finished | default(false) | bool)
