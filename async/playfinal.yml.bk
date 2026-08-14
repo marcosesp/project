@@ -1,5 +1,5 @@
 ---
-- name: DNF update con monitoreo en tiempo real
+- name: DNF update con monitoreo
   hosts: all
   become: true
 
@@ -23,17 +23,30 @@
         dest: "{{ dnf_offset }}"
         mode: "0644"
 
-    - name: Iniciar DNF update en segundo plano
+    - name: Iniciar DNF update
       ansible.builtin.shell: |
         stdbuf -oL -eL dnf -y update > {{ dnf_log }} 2>&1
       async: 10800
       poll: 0
       register: dnf_job
 
-    - name: Monitorear proceso DNF
+    - name: Inicializar estado
+      ansible.builtin.set_fact:
+        dnf_finished: false
+
+    - name: Monitorear DNF
       ansible.builtin.include_tasks:
         file: monitor_dnf.yml
-      loop: "{{ range(1, 10801) | list }}"
+      loop: "{{ range(1, 2161) | list }}"
       loop_control:
         loop_var: monitor_iteration
-        pause: 1
+      when: not dnf_finished
+
+    - name: Validar resultado final
+      ansible.builtin.fail:
+        msg: |
+          DNF terminó con error.
+          Return code: {{ dnf_status.rc }}
+      when:
+        - dnf_status.rc is defined
+        - dnf_status.rc | int != 0

@@ -1,46 +1,50 @@
 ---
-- name: Consultar estado del proceso DNF
+- name: Consultar estado de DNF
   ansible.builtin.async_status:
     jid: "{{ dnf_job.ansible_job_id }}"
   register: dnf_status
   failed_when: false
 
-- name: Leer nuevo output de DNF
+
+- name: Obtener nuevas lineas
   ansible.builtin.shell: |
     inicio=$(cat {{ dnf_offset }})
 
     if [ -f {{ dnf_log }} ]; then
+
       total=$(wc -l < {{ dnf_log }})
 
       if [ "$total" -ge "$inicio" ]; then
-        tail -n +"$inicio" {{ dnf_log }}
+
+        sed -n "${inicio},${total}p" {{ dnf_log }}
+
         echo $((total + 1)) > {{ dnf_offset }}
+
       fi
+
     fi
   register: dnf_output
   changed_when: false
   failed_when: false
 
-- name: Mostrar nuevo output
+
+- name: Mostrar progreso DNF
   ansible.builtin.debug:
     msg: "{{ dnf_output.stdout_lines }}"
   when:
     - dnf_output.stdout is defined
     - dnf_output.stdout | length > 0
 
-- name: Fallar si DNF termino con error
-  ansible.builtin.fail:
-    msg: |
-      DNF terminó con error.
-      Return code: {{ dnf_status.rc }}
-  when:
-    - dnf_status.finished | default(false)
-    - dnf_status.rc is defined
-    - dnf_status.rc | int != 0
 
-- name: Finalizar monitoreo si DNF termino correctamente
-  ansible.builtin.meta: end_host
+- name: Marcar proceso como finalizado
+  ansible.builtin.set_fact:
+    dnf_finished: true
   when:
-    - dnf_status.finished | default(false)
-    - dnf_status.rc is defined
-    - dnf_status.rc | int == 0
+    dnf_status.finished | default(false)
+
+
+- name: Esperar 1 segundos
+  ansible.builtin.pause:
+    seconds: 1
+  when:
+    not dnf_finished
