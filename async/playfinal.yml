@@ -1,9 +1,52 @@
 ---
-- name: Actualizar Sistema con Logs en Tiempo Real
+- name: DNF update con monitoreo
   hosts: all
   become: true
-  gather_facts: false
+
+  vars:
+    dnf_log: /tmp/dnf-update.log
+    dnf_offset: /tmp/dnf-update.offset
 
   tasks:
-    - name: Ejecutar actualización de DNF con streaming directo
-      ansible.builtin.script: update.sh
+
+    - name: Limpiar archivos anteriores
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "{{ dnf_log }}"
+        - "{{ dnf_offset }}"
+
+    - name: Inicializar offset
+      ansible.builtin.copy:
+        content: "1"
+        dest: "{{ dnf_offset }}"
+        mode: "0644"
+
+    - name: Iniciar DNF update
+      ansible.builtin.shell: |
+        stdbuf -oL -eL dnf -y update > {{ dnf_log }} 2>&1
+      async: 10800
+      poll: 0
+      register: dnf_job
+
+    - name: Inicializar estado
+      ansible.builtin.set_fact:
+        dnf_finished: false
+
+    - name: Monitorear DNF
+      ansible.builtin.include_tasks:
+        file: monitor_dnf.yml
+      loop: "{{ range(1, 2161) | list }}"
+      loop_control:
+        loop_var: monitor_iteration
+      when: not dnf_finished
+
+    - name: Validar resultado final
+      ansible.builtin.fail:
+        msg: |
+          DNF terminó con error.
+          Return code: {{ dnf_status.rc }}
+      when:
+        - dnf_status.rc is defined
+        - dnf_status.rc | int != 0

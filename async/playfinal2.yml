@@ -1,0 +1,9 @@
+---
+- name: Actualizar Sistema con Logs en Tiempo Real
+  hosts: all
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Ejecutar actualización de DNF con streaming directo
+      ansible.builtin.script: update.sh
