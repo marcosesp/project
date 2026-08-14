@@ -43,8 +43,8 @@
     dnf_status.finished | default(false)
 
 
-- name: Esperar 5 segundos
+- name: Esperar 1 segundos
   ansible.builtin.pause:
-    seconds: 5
+    seconds: 1
   when:
     not dnf_finished
