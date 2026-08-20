@@ -35,4 +35,4 @@
         file: monitor_dnf.yml
       loop: "{{ range(1, 10801) | list }}"
       loop_control:
-        loop_var: monitor_iteration
+        loop_var: monitor
