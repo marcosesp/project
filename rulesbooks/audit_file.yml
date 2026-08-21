@@ -1,1 +1,16 @@
-1
+---
+- name: Audit File Rulebook
+  hosts: all
+
+  sources:
+    - ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+
+  rules:
+    - name: Detectar cambio real en archivo
+      condition: event.checksum_changed == true
+      action:
+        run_job_template:
+          name: "winscp template"
+          organization: "Default"
